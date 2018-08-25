@@ -1,41 +1,49 @@
-import {GET_TODOS, ADD_TODO} from './action-types';
+import { ADD_ERROR, REMOVE_ERROR, SET_CURRENT_USER } from './action-constants';
 
-const getTodos = (todos) => {
+export const addError = (errorMessage) => {
     return {
-        type: GET_TODOS,
-        todos
+        type: ADD_ERROR,
+        errorMessage
     };
 };
 
-const addTodo = (todo) => {
+export const removeError = () => {
     return {
-        type: ADD_TODO,
-        todo
+        type: REMOVE_ERROR
     };
 };
 
-export const fetchToDos = () => {
-    return (dispatch) => {
-        return fetch('http://localhost:8081/api/todos')
-        .then((response) => response.json())
-        .then((data) => {
-            dispatch(getTodos(data.todos));
-        })
-        .catch((err) => console.log(err));
+export const setCurrentUser = (user) => {
+    return {
+        type: SET_CURRENT_USER,
+        user
     };
 };
 
-export const createToDo = (todoToAdd) => {
+export const logoutUser = () => {
+      return (dispatch) => {
+         localStorage.clear();
+         dispatch(setCurrentUser({}));
+      };
+};
+
+export const userAuthentication = (authType, userDetails) => {
     return (dispatch) => {
-        return fetch('http://localhost:8081/api/todos', {
+        return fetch(`http://localhost:8081/api/user/${authType}`, {
             method: 'post',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(todoToAdd)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userDetails)
         })
-        .then((response) => response.json())
-        .then((data) => {
-            dispatch(addTodo(data.todo));
-        })
-        .catch((err) => console.log(err));
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    dispatch(addError(data.error));
+                } else {
+                    const { token, ...rest } = data;
+                    localStorage.setItem('jwtToken', token);
+                    dispatch(setCurrentUser(rest));
+                };
+            })
+            .catch((err) => console.log(err));
     };
 };

@@ -1,13 +1,20 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import {logoutUser} from '../store/actiongenerators/actions';
+import {connect} from 'react-redux';
 
-const HomePage = () => {
-   return (
-      <div className="container text-center homepage-cont">
-         <h1 className="text-white">Welcome to To-Do App</h1>
-         <Link to="/gettodos" className="btn btn-warning">See Todo's!</Link>
-      </div>
-   );
-};
+    class HomePage extends Component {
+        componentDidMount(){
+          this.props.logoutUser();
+        };
+        render() {
+            return (
+                <div className="container text-center homepage-cont">
+                    <h1 className="text-white">Welcome to To-Do App</h1>
+                    <Link to="/signup" className="btn btn-warning">Sign up here!</Link>
+                </div>
+            );
+        };
+    };
 
-export default HomePage;
+export default connect(null, {logoutUser})(HomePage);
