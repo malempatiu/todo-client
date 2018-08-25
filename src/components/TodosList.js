@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import {fetchTodos} from '../store/actiongenerators/actions';
+import {connect} from 'react-redux';
 
 class TodosList extends Component {
+    componentDidMount(){
+       this.props.fetchTodos();
+    };
     render() {
         return (
             <div className="container">
@@ -10,4 +15,4 @@ class TodosList extends Component {
     }
 };
 
-export default TodosList;
+export default connect(null, {fetchTodos})(TodosList);

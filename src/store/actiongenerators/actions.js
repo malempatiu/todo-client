@@ -1,4 +1,4 @@
-import { ADD_ERROR, REMOVE_ERROR, SET_CURRENT_USER } from './action-constants';
+import { ADD_ERROR, REMOVE_ERROR, SET_CURRENT_USER, GET_TODOS } from './action-constants';
 
 export const addError = (errorMessage) => {
     return {
@@ -21,10 +21,17 @@ export const setCurrentUser = (user) => {
 };
 
 export const logoutUser = () => {
-      return (dispatch) => {
-         localStorage.clear();
-         dispatch(setCurrentUser({}));
-      };
+    return (dispatch) => {
+        localStorage.clear();
+        dispatch(setCurrentUser({}));
+    };
+};
+
+export const getTodos = (todos) => {
+    return {
+        type: GET_TODOS,
+        todos
+    };
 };
 
 export const userAuthentication = (authType, userDetails) => {
@@ -42,6 +49,28 @@ export const userAuthentication = (authType, userDetails) => {
                     const { token, ...rest } = data;
                     localStorage.setItem('jwtToken', token);
                     dispatch(setCurrentUser(rest));
+                };
+            })
+            .catch((err) => console.log(err));
+    };
+};
+
+export const fetchTodos = () => {
+    return (dispatch, getState) => {
+        const { currentUser } = getState();
+        const token = localStorage.getItem('jwtToken');
+        return fetch(`http://localhost:8081/api/user/${currentUser.user._id}/todos`, {
+            headers: {
+                "authorization": `Bearer ${token}`
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                if (data.error) {
+                    console.log(data.error);
+                } else {
+                    console.log(data.todos);
                 };
             })
             .catch((err) => console.log(err));
