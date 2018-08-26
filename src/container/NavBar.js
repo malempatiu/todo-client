@@ -8,7 +8,7 @@ class NavBar extends Component {
         return (
             <nav className="navbar navbar-expand-lg navbar-dark sticky-top">
                 <div className="container">
-                    <h1 className="navbar-brand font-weight-bold">To-Do List App</h1>
+                    <h1 className="navbar-brand font-weight-bold"><i className="far fa-list-alt"></i> Todo List</h1>
                     <div className="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
                         <span className="navbar-toggler-icon"></span>
                     </div>

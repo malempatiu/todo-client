@@ -22,8 +22,16 @@ nav{
 }
 
 /*HomePage Container*/
-.homepage-cont{
+.home-page-cont{
   padding-top: 120px;
+}
+
+.jumbotron{
+  background: #454545;
+}
+
+.far{
+  color: #fff;
 }
 
 /*Auth Form*/
@@ -59,4 +67,8 @@ nav{
 
 .todo-delete-btn{
   float: right;
+}
+
+.completed{
+  text-decoration: line-through;
 }

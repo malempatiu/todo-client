@@ -1,4 +1,4 @@
-import { ADD_ERROR, REMOVE_ERROR, SET_CURRENT_USER, GET_TODOS, ADD_TODO } from './action-constants';
+import { ADD_ERROR, REMOVE_ERROR, SET_CURRENT_USER, GET_TODOS, ADD_TODO, DELETE_TODO, UPDATE_TODO } from './action-constants';
 
 export const addError = (errorMessage) => {
     return {
@@ -39,7 +39,21 @@ export const addTodo = (todo) => {
       type: ADD_TODO,
       todo
     };
-}
+};
+
+export const deleteTodo = (removedTodo) => {
+   return {
+       type: DELETE_TODO,
+       removedTodo
+   };
+};
+
+export const tweakTodo = (updatedTodo) => {
+    return {
+        type: UPDATE_TODO,
+        updatedTodo
+    };
+};
 
 export const userAuthentication = (authType, userDetails) => {
     return (dispatch) => {
@@ -105,4 +119,50 @@ export const createTodo = (text) => {
             })
             .catch((err) => console.log(err));
     };
+};
+
+export const removeTodo = (todoID) => {
+     return (dispatch, getState) => {
+        const { currentUser } = getState();
+        const token = localStorage.getItem('jwtToken');
+         return fetch(`http://localhost:8081/api/user/${currentUser.user._id}/todos/${todoID}`, {
+             method: 'DELETE',
+             headers: {
+                "authorization": `Bearer ${token}`
+            }
+         })
+         .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    dispatch(addError(data.error));
+                } else {
+                    dispatch(deleteTodo(data.deletedTodo));
+                };
+            })
+            .catch((err) => console.log(err));
+     };   
+};
+
+export const updateTodo = (todoIdToUpdate, isChecked) => {
+    return (dispatch, getState) => {
+       const { currentUser } = getState();
+       const token = localStorage.getItem('jwtToken');
+        return fetch(`http://localhost:8081/api/user/${currentUser.user._id}/todos/${todoIdToUpdate}`, {
+            method: 'PUT',
+            headers: {
+               "Content-Type": "application/json",
+               "authorization": `Bearer ${token}`
+           },
+           body: JSON.stringify(isChecked)
+        })
+        .then((response) => response.json())
+           .then((data) => {
+               if (data.error) {
+                   dispatch(addError(data.error));
+               } else {
+                   dispatch(tweakTodo(data.updatedTodo));
+               };
+           })
+           .catch((err) => console.log(err));
+    };   
 };
