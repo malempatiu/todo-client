@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
-import HomePage from '../components/HomePage';
-import NavBar from './NavBar';
-import AuthForm from '../components/AuthForm';
 import { combineReducers ,createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import currentUser from '../store/reducers/currentUser';
-import {setCurrentUser} from '../store/actiongenerators/actions';
 import errors from '../store/reducers/errors';
-import TodosList from '../components/TodosList';
+import todos from '../store/reducers/todos';
+import {setCurrentUser} from '../store/actiongenerators/actions';
 import {removeError} from '../store/actiongenerators/actions';
+import HomePage from '../components/HomePage';
+import NavBar from './NavBar';
+import AuthForm from '../components/AuthForm';
+import TodosList from '../components/TodosList';
+import CreateTodo from '../components/CreateTodo';
 
 const store = createStore(
   combineReducers({
     currentUser,
-    errors
+    errors,
+    todos
   }),
   compose(
     applyMiddleware(thunk)
@@ -56,6 +59,7 @@ class App extends Component {
                 }
                 } />
                 <Route exact path="/todoslist" component={TodosList} />
+                <Route exact path="/addtodo" component={CreateTodo} />
               </Switch>
             </div>
           </BrowserRouter>

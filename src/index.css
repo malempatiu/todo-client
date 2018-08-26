@@ -17,6 +17,10 @@ nav{
   padding: 8px;
 }
 
+.nav-link{
+  margin: 4px 8px;
+}
+
 /*HomePage Container*/
 .homepage-cont{
   padding-top: 120px;
@@ -26,4 +30,33 @@ nav{
 .authform-cont{
   padding-top: 80px;
   width: 65%; 
+}
+
+/*TodoList Component*/
+.todo-list-cont{
+  width: 65%;
+  margin: 0 auto;
+  padding-top: 80px; 
+}
+
+.todo-row{
+  margin: 12px auto;
+  background-color: #454545;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.todo-check-input{
+  float: left;
+  margin-top: 14px;
+}
+
+.todo-text{
+  float: left;
+  margin-bottom: 0px;
+  padding: 8px 0px;
+}
+
+.todo-delete-btn{
+  float: right;
 }

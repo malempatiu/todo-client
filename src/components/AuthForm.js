@@ -42,10 +42,12 @@ class AuthForm extends Component {
                                 <div className="form-group">
                                     <label className="font-weight-bold" htmlFor="email">Email:</label>
                                     <input type="text" className="form-control" id="email" onChange={this.handleEmail} />
+                                    <small id="emailHelp" className="form-text text-muted">abc@abc.com</small>
                                 </div>
                                 <div className="form-group">
                                     <label className="font-weight-bold" htmlFor="password">Password:</label>
                                     <input type="password" className="form-control" id="password" onChange={this.handlePassword} />
+                                    <small id="emailHelp" className="form-text text-muted">min.length 6</small>
                                 </div>
                                 {signUp && (
                                     <div className="form-group">

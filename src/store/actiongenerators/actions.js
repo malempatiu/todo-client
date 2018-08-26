@@ -1,4 +1,4 @@
-import { ADD_ERROR, REMOVE_ERROR, SET_CURRENT_USER, GET_TODOS } from './action-constants';
+import { ADD_ERROR, REMOVE_ERROR, SET_CURRENT_USER, GET_TODOS, ADD_TODO } from './action-constants';
 
 export const addError = (errorMessage) => {
     return {
@@ -34,6 +34,13 @@ export const getTodos = (todos) => {
     };
 };
 
+export const addTodo = (todo) => {
+    return {
+      type: ADD_TODO,
+      todo
+    };
+}
+
 export const userAuthentication = (authType, userDetails) => {
     return (dispatch) => {
         return fetch(`http://localhost:8081/api/user/${authType}`, {
@@ -66,11 +73,34 @@ export const fetchTodos = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 if (data.error) {
-                    console.log(data.error);
+                    dispatch(addError(data.error));
                 } else {
-                    console.log(data.todos);
+                    dispatch(getTodos(data.todos));
+                };
+            })
+            .catch((err) => console.log(err));
+    };
+};
+
+export const createTodo = (text) => {
+    return (dispatch, getState) => {
+        const { currentUser } = getState();
+        const token = localStorage.getItem('jwtToken');
+        return fetch(`http://localhost:8081/api/user/${currentUser.user._id}/todos`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(text)
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    dispatch(addError(data.error));
+                } else {
+                    dispatch(addTodo(data.todo));
                 };
             })
             .catch((err) => console.log(err));
